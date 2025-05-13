@@ -317,7 +317,7 @@ const updateFunFact = async (req, res) => {
             }
         }
 
-        return res.status(201).json({ exist });
+        return res.status(201).json( exist );
     }
     catch (err) {
         console.error('Error: ', err);
@@ -368,7 +368,7 @@ const deleteFunFact = async (req, res) => {
                 await exist.save();
             }
         }
-        return res.status(200).json({exist});
+        return res.status(200).json(exist);
     }
     catch (err) {
         console.error('Error: ', err);
