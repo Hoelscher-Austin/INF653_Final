@@ -21,6 +21,9 @@ app.get(/^\/$|\/index(\.html)?$/, (req, res) => {
     res.sendFile(path.join(__dirname, 'views', 'index.html'));
 });
 
+// API Routes
+app.use('/states', stateRoutes);
+
 app.all(/^\/.*/, (req, res) => {
     // res.status(404).sendFile( path.join(__dirname, 'views', '404.html'));
     res.status(404);
@@ -36,8 +39,6 @@ app.all(/^\/.*/, (req, res) => {
 
 });
 
-// API Routes
-app.use('/states', stateRoutes);
 
 
 
