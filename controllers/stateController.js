@@ -67,6 +67,10 @@ const getState = async (req, res) => {
             s.code === code.toUpperCase()
         );
 
+        if (!state) {
+            return res.status(404).json({ message: `Invalid state abbreviation parameter` });
+        }
+
         const exist = await stateModel.findOne({ stateCode: code.toLowerCase() });
 
         if (exist && exist.funfacts?.length > 0) {
@@ -106,7 +110,7 @@ const getFunFact = async (req, res) => {
             const randomIndex = Math.floor(Math.random() * funfacts.length);
             const randomFact = funfacts[randomIndex];
 
-            return res.status(200).json({ message: randomFact });
+            return res.status(200).json({ funfact: randomFact });
         }
 
         return res.status(404).json({ message: `No Fun Facts found for ${state.state}` })
@@ -230,7 +234,11 @@ const createFunFact = async (req, res) => {
     const facts = req.body.funfacts;
 
     if (!state || !facts) {
-        return res.status(400).json({ message: 'Bad Request' });
+        return res.status(400).json({ message: 'State fun facts value required' });
+    }
+
+    if(!Array.isArray(facts)){
+        return res.status(400).json({ message: 'State fun facts value must be an array' });
     }
 
     state = state.toLowerCase();
@@ -244,12 +252,12 @@ const createFunFact = async (req, res) => {
                 'stateCode': state,
                 'funfacts': facts
             });
-            return res.status(201).json(result);
+            return res.status(201).json({result});
         }
         else {
             exist.funfacts.push(...facts);
             exist.save();
-            return res.status(201).json(facts);
+            return res.status(201).json({facts});
         }
 
     }
@@ -271,8 +279,12 @@ const updateFunFact = async (req, res) => {
 
     try {
 
-        if (!fact || !index) {
-            return res.status(404).json({ message: `Incomplete body parameters` });
+        if (!index) {
+            return res.status(404).json({ message: `State fun fact index value required` });
+        }
+
+        if (!fact) {
+            return res.status(404).json({ message: `State fun fact value required` });
         }
 
         index -= 1;
@@ -305,7 +317,7 @@ const updateFunFact = async (req, res) => {
             }
         }
 
-        return res.status(201).json({ message: fact });
+        return res.status(201).json({ exist });
     }
     catch (err) {
         console.error('Error: ', err);
@@ -324,7 +336,7 @@ const deleteFunFact = async (req, res) => {
     try {
 
         if (!index) {
-            return res.status(404).json({ message: `Incomplete body parameters` });
+            return res.status(404).json({ message: `State fun fact index value required` });
         }
 
         index -= 1;
@@ -356,7 +368,7 @@ const deleteFunFact = async (req, res) => {
                 await exist.save();
             }
         }
-        return res.status(200).json({message: `Fun fact at index ${index} has been deleted`});
+        return res.status(200).json({exist});
     }
     catch (err) {
         console.error('Error: ', err);
