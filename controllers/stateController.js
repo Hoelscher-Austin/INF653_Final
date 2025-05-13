@@ -252,12 +252,12 @@ const createFunFact = async (req, res) => {
                 'stateCode': state,
                 'funfacts': facts
             });
-            return res.status(201).json({result});
+            return res.status(201).json(result);
         }
         else {
             exist.funfacts.push(...facts);
             exist.save();
-            return res.status(201).json({facts});
+            return res.status(201).json(exist);
         }
 
     }
