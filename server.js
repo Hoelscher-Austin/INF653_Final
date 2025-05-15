@@ -18,7 +18,7 @@ app.use(express.static(path.join(__dirname, '/public')));
 
 app.get(/^\/$|\/index(\.html)?$/, (req, res) => {
     //res.sendFile('./views/index.html', {root: __dirname});
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    res.sendFile(path.join(__dirname, 'views', 'Index.html'));
 });
 
 // API Routes
